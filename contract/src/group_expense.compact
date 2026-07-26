@@ -1,0 +1,60 @@
+// Private Group Expense Splitter - Midnight Compact Smart Contract
+// Preserves financial privacy: expense amounts, receipt metadata, and individual split breakdown stay private (ZK witness).
+// Only high-level commitments, group metadata hash, expense counters, and settlement status are stored on-chain.
+
+pragma language_version >= 0.14.0;
+
+export enum SettlementStatus {
+    active,
+    settling,
+    settled
+}
+
+export ledger groupId: Bytes<32>;
+export ledger groupNameHash: Bytes<32>;
+export ledger memberCount: Uint<64>;
+export ledger expenseCount: Uint<64>;
+export ledger settlementStatus: Uint<64>; // 0 = Active, 1 = Settling, 2 = Settled
+export ledger balanceCommitment: Bytes<32>;
+
+witness getExpenseAmount(): Uint<64>;
+witness getExpenseNotesHash(): Bytes<32>;
+witness getMemberBalance(memberId: Uint<64>): Uint<64>;
+
+export circuit createGroup(id: Bytes<32>, nameHash: Bytes<32>, initialMembers: Uint<64>): [] {
+    groupId = disclose(id);
+    groupNameHash = disclose(nameHash);
+    memberCount = disclose(initialMembers);
+    expenseCount = 0 as Uint<64>;
+    settlementStatus = 0 as Uint<64>;
+    balanceCommitment = disclose(nameHash);
+}
+
+export circuit addMember(id: Bytes<32>): [] {
+    assert(groupId == id, "Group ID mismatch");
+    memberCount = (memberCount + 1) as Uint<64>;
+}
+
+export circuit addPrivateExpense(id: Bytes<32>, expenseCommitment: Bytes<32>): [] {
+    assert(groupId == id, "Group ID mismatch");
+    assert(settlementStatus == 0 as Uint<64>, "Group is already settled");
+    
+    // Read private witness amount to ensure valid non-zero expense inside ZK circuit
+    const amount = getExpenseAmount();
+    assert(amount > 0 as Uint<64>, "Expense amount must be greater than zero");
+    
+    // Update public ledger counters and commitment
+    expenseCount = (expenseCount + 1) as Uint<64>;
+    balanceCommitment = disclose(expenseCommitment);
+}
+
+export circuit settleBalances(id: Bytes<32>, newCommitment: Bytes<32>): [] {
+    assert(groupId == id, "Group ID mismatch");
+    balanceCommitment = disclose(newCommitment);
+    settlementStatus = 1 as Uint<64>;
+}
+
+export circuit markSettled(id: Bytes<32>): [] {
+    assert(groupId == id, "Group ID mismatch");
+    settlementStatus = 2 as Uint<64>;
+}
