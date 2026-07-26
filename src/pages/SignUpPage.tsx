@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Wallet, ArrowRight, CheckCircle2, User, Lock, ArrowLeft } from 'lucide-react';
+import { Shield, Wallet, ArrowRight, CheckCircle2, Lock, ArrowLeft } from 'lucide-react';
 import { WalletState } from '../types';
 
 interface SignUpPageProps {
@@ -92,17 +92,14 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
               
               <div>
                 <label className="block text-textPrimary font-semibold mb-1">Your Full Name / Display Name *</label>
-                <div className="relative">
-                  <User className="w-4 h-4 absolute left-3 top-2.5 text-textSecondary" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g., Alice Vance"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="input-field pl-9"
-                  />
-                </div>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g., Alice Vance"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="input-field"
+                />
               </div>
 
               <div>
