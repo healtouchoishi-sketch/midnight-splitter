@@ -174,5 +174,13 @@ Once a Preprod contract address is generated, update `.env` or set environment v
 VITE_NETWORK=preprod
 VITE_CONTRACT_ADDRESS=<your_preprod_contract_address>
 VITE_PROOF_SERVER_URL=http://localhost:6300
+
+##Screenshot:
+<img width="701" height="194" alt="image" src="https://github.com/user-attachments/assets/88029602-4143-4500-98b5-9497bc9c38c2" />
+<img width="383" height="191" alt="image" src="https://github.com/user-attachments/assets/46d676ee-8f32-4dfa-9e3c-37fb552814b3" />
+<img width="1857" height="946" alt="image" src="https://github.com/user-attachments/assets/8b52dcc5-9d01-4bfd-9fb3-42e1a46e59ba" />
+<img width="1323" height="939" alt="image" src="https://github.com/user-attachments/assets/2474f126-c603-4585-b108-6abcfbe1f326" />
+
+
 ```
 Then run `npm run dev` or build for production (`npm run build`).
