@@ -30,17 +30,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci || npm install
 
-      - name: Typecheck Project
-        run: npm run typecheck
-
       - name: Compile Compact Smart Contract
         run: |
           mkdir -p contract/managed
           if command -v compact &> /dev/null; then
-            compact compile contract/src/group_expense.compact contract/managed/group_expense
+            npm run compile
           else
             echo "Compact compiler step verified."
           fi
+
+      - name: Typecheck Project
+        run: npm run typecheck
 
       - name: Run Test Suite
         run: npm test
