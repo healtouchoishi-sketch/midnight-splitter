@@ -9,7 +9,7 @@
 
 Watch the complete dApp demonstration video on YouTube:  
 ▶️ **[Midnight Private Group Expense Splitter Demo Video](https://youtu.be/I_FreFu17sM)**
-
+## https://midnight-splitter.vercel.app/
 ---
 
 ## 🚀 Product Overview & Value Proposition
@@ -184,3 +184,8 @@ VITE_PROOF_SERVER_URL=http://localhost:6300
 
 ```
 Then run `npm run dev` or build for production (`npm run build`).
+
+Screenshots:
+<img width="1292" height="954" alt="image" src="https://github.com/user-attachments/assets/6bb05a99-073f-4ffc-8bcc-2178e0cacad7" />
+<img width="1241" height="953" alt="image" src="https://github.com/user-attachments/assets/cce9293b-b240-43fd-a5d6-dc145937b691" />
+
