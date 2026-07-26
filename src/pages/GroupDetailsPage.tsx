@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Group, Expense } from '../types';
-import { Users, Plus, CreditCard, Scale, ShieldCheck, ArrowLeft, Lock, FileText, CheckCircle2, X } from 'lucide-react';
+import { Users, Plus, CreditCard, Scale, ShieldCheck, ArrowLeft, Lock, FileText, CheckCircle2, X, UserPlus } from 'lucide-react';
 
 interface GroupDetailsPageProps {
   group: Group;
   onBack: () => void;
   onOpenAddExpense: () => void;
   onOpenSettlement: () => void;
+  onAddMember?: (groupId: string, memberName: string) => void;
 }
 
 export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
@@ -14,8 +15,20 @@ export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
   onBack,
   onOpenAddExpense,
   onOpenSettlement,
+  onAddMember,
 }) => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+  const [newMemberName, setNewMemberName] = useState('');
+
+  const handleAddMemberSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newMemberName.trim() && onAddMember) {
+      onAddMember(group.id, newMemberName.trim());
+      setNewMemberName('');
+      setIsAddMemberOpen(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -26,7 +39,7 @@ export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Groups</span>
         </button>
-        <span className="text-xs text-textSecondary font-mono">
+        <span className="text-xs text-textSecondary font-mono truncate">
           Contract: {group.contractAddress || '0x4a91b820...'}
         </span>
       </div>
@@ -45,6 +58,10 @@ export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            <button onClick={() => setIsAddMemberOpen(true)} className="btn-secondary">
+              <UserPlus className="w-4 h-4 text-textSecondary" />
+              <span>Add Member</span>
+            </button>
             <button onClick={onOpenSettlement} className="btn-secondary">
               <Scale className="w-4 h-4 text-statusWarning" />
               <span>Settle Balances (ZK)</span>
@@ -58,7 +75,10 @@ export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
 
         {/* Member Balances Bar */}
         <div className="space-y-2">
-          <h3 className="text-xs font-semibold text-textPrimary">Member Net Balances (Off-chain Witness)</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-semibold text-textPrimary">Member Net Balances (Off-chain Witness)</h3>
+            <span className="text-[11px] text-textSecondary font-mono">{group.members.length} Members</span>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {group.members.map((member) => {
               const isOwed = member.balance > 0;
@@ -153,10 +173,45 @@ export const GroupDetailsPage: React.FC<GroupDetailsPageProps> = ({
         )}
       </div>
 
+      {/* Add Member Modal */}
+      {isAddMemberOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-sm w-full p-5 space-y-4 shadow-lg">
+            <div className="flex items-center justify-between border-b border-borderSubtle pb-3">
+              <h3 className="text-sm font-bold text-textPrimary">Add Member to {group.name}</h3>
+              <button onClick={() => setIsAddMemberOpen(false)} className="p-1 rounded text-textSecondary hover:text-textPrimary">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleAddMemberSubmit} className="space-y-3 text-xs">
+              <div>
+                <label className="block text-textPrimary font-semibold mb-1">Member Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g., David or Eva"
+                  value={newMemberName}
+                  onChange={(e) => setNewMemberName(e.target.value)}
+                  className="input-field"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2 border-t border-borderSubtle">
+                <button type="button" onClick={() => setIsAddMemberOpen(false)} className="btn-secondary">
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary">
+                  Add to Roster
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Expense Detail Inspector Modal */}
       {selectedExpense && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-md w-full p-6 space-y-4">
+          <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-md w-full p-6 space-y-4 shadow-lg">
             <div className="flex items-center justify-between border-b border-borderSubtle pb-3">
               <h3 className="text-base font-semibold text-textPrimary">{selectedExpense.title}</h3>
               <button onClick={() => setSelectedExpense(null)} className="p-1 rounded text-textSecondary hover:text-textPrimary">

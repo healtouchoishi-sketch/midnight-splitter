@@ -119,7 +119,7 @@ const INITIAL_GROUPS: Group[] = [
 ];
 
 export const App: React.FC = () => {
-  // Application ALWAYS starts on Landing page
+  // Application ALWAYS starts on Landing page by default
   const [activeTab, setActiveTab] = useState<string>('landing');
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
@@ -209,6 +209,25 @@ export const App: React.FC = () => {
     setGroups([newGroup, ...groups]);
     setSelectedGroupId(newGroupId);
     setActiveTab('groupDetails');
+  };
+
+  const handleAddMemberToGroup = (groupId: string, memberName: string) => {
+    const targetGroup = groups.find(g => g.id === groupId);
+    if (!targetGroup) return;
+
+    const newMemberObj = {
+      id: `mbr_${Date.now()}`,
+      name: memberName,
+      walletAddress: `mn_addr_undeployed${targetGroup.members.length + 1}...`,
+      balance: 0
+    };
+
+    const updatedGroup = {
+      ...targetGroup,
+      members: [...targetGroup.members, newMemberObj]
+    };
+
+    setGroups(groups.map(g => g.id === groupId ? updatedGroup : g));
   };
 
   const handleAddExpense = async (data: any) => {
@@ -365,6 +384,7 @@ export const App: React.FC = () => {
               onBack={() => setActiveTab('groups')}
               onOpenAddExpense={() => setIsAddExpenseOpen(true)}
               onOpenSettlement={() => setActiveTab('settlement')}
+              onAddMember={handleAddMemberToGroup}
             />
           )}
 

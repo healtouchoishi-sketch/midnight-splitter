@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Shield, Users } from 'lucide-react';
 
 interface CreateGroupModalProps {
@@ -18,11 +18,22 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   const [members, setMembers] = useState<string[]>(['Alice (You)', 'Bob', 'Charlie']);
   const [newMember, setNewMember] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      setName('');
+      setDescription('');
+      setCurrency('USD');
+      setMembers(['Alice (You)', 'Bob', 'Charlie']);
+      setNewMember('');
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleAddMember = () => {
-    if (newMember.trim() && !members.includes(newMember.trim())) {
-      setMembers([...members, newMember.trim()]);
+    const trimmed = newMember.trim();
+    if (trimmed && !members.includes(trimmed)) {
+      setMembers([...members, trimmed]);
       setNewMember('');
     }
   };
@@ -36,19 +47,28 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    let finalMembers = [...members];
+    const trimmedPending = newMember.trim();
+    if (trimmedPending && !finalMembers.includes(trimmedPending)) {
+      finalMembers.push(trimmedPending);
+    }
+
     onCreateGroup({
       name: name.trim(),
       description: description.trim() || 'Private group expense split',
       currency,
-      memberNames: members
+      memberNames: finalMembers
     });
+
     setName('');
     setDescription('');
+    setNewMember('');
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 shadow-lg">
       <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-lg w-full p-6 space-y-5">
         
         {/* Header */}
@@ -116,6 +136,12 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 placeholder="Member name or wallet address"
                 value={newMember}
                 onChange={(e) => setNewMember(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddMember();
+                  }
+                }}
                 className="input-field"
               />
               <button

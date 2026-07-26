@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Group, SplitMethod, Member } from '../types';
 import { X, Plus, Upload, ShieldCheck, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
 import { calculateSplits, validateSplitInputs } from '../utils/splitCalculator';
@@ -41,15 +41,62 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
   const [customValues, setCustomValues] = useState<Record<string, number>>({});
   const [receipt, setReceipt] = useState<{ filename: string; filesize: string; mimeType: string; hash: string } | null>(null);
 
+  // Sync state whenever modal opens or selectedGroupId changes
+  useEffect(() => {
+    if (isOpen) {
+      const initialGroup = groups.find(g => g.id === selectedGroupId) || groups[0];
+      setGroupId(initialGroup?.id || '');
+      setTitle('');
+      setTotalAmount('');
+      setPayerId(initialGroup?.members[0]?.id || '');
+      setCategory('Dining');
+      setDate(new Date().toISOString().split('T')[0]);
+      setNotes('');
+      setSplitMethod('equal');
+      setCustomValues({});
+      setReceipt(null);
+    }
+  }, [isOpen, selectedGroupId, groups]);
+
   if (!isOpen) return null;
 
   const currentGroup = groups.find(g => g.id === groupId) || groups[0];
   const members = currentGroup?.members || [];
 
-  // Default payer to first member if not selected
-  const activePayerId = payerId || members[0]?.id || '';
+  // Default payer to first member if valid
+  const activePayerId = (payerId && members.some(m => m.id === payerId)) ? payerId : (members[0]?.id || '');
 
   const numAmount = typeof totalAmount === 'number' ? totalAmount : 0;
+
+  // Auto-fill sensible defaults when switching split methods
+  const handleSplitMethodChange = (newMethod: SplitMethod) => {
+    setSplitMethod(newMethod);
+    const initialValues: Record<string, number> = {};
+
+    if (newMethod === 'percentage') {
+      const num = members.length || 1;
+      const basePct = Math.floor(100 / num);
+      const remainder = 100 - (basePct * num);
+      members.forEach((m, idx) => {
+        initialValues[m.id] = idx === 0 ? basePct + remainder : basePct;
+      });
+    } else if (newMethod === 'exact') {
+      const num = members.length || 1;
+      const baseAmt = Math.round((numAmount / num) * 100) / 100;
+      const sum = baseAmt * num;
+      const remainder = Math.round((numAmount - sum) * 100) / 100;
+      members.forEach((m, idx) => {
+        initialValues[m.id] = idx === 0 ? Math.round((baseAmt + remainder) * 100) / 100 : baseAmt;
+      });
+    } else if (newMethod === 'shares') {
+      members.forEach(m => {
+        initialValues[m.id] = 1;
+      });
+    }
+
+    setCustomValues(initialValues);
+  };
+
   const calculatedSplits = calculateSplits(numAmount, members, splitMethod, customValues);
   const validation = validateSplitInputs(numAmount, members, splitMethod, customValues);
 
@@ -72,7 +119,7 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || numAmount <= 0 || !validation.valid) return;
+    if (!title.trim() || numAmount <= 0 || !validation.valid || !currentGroup) return;
 
     onAddExpense({
       groupId: currentGroup.id,
@@ -88,17 +135,12 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
       receiptMetadata: receipt || undefined
     });
 
-    // Reset form
-    setTitle('');
-    setTotalAmount('');
-    setNotes('');
-    setReceipt(null);
     onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
-      <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-xl w-full p-6 space-y-5 my-8">
+      <div className="bg-bgMain border border-borderSubtle rounded-lg max-w-xl w-full p-6 space-y-5 my-8 shadow-lg">
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-borderSubtle pb-4">
@@ -119,7 +161,13 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
               <label className="block text-textPrimary font-semibold mb-1">Target Group *</label>
               <select
                 value={groupId}
-                onChange={(e) => setGroupId(e.target.value)}
+                onChange={(e) => {
+                  setGroupId(e.target.value);
+                  const selectedG = groups.find(g => g.id === e.target.value);
+                  if (selectedG && selectedG.members.length > 0) {
+                    setPayerId(selectedG.members[0].id);
+                  }
+                }}
                 className="input-field"
               >
                 {groups.map(g => (
@@ -206,7 +254,7 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                 <button
                   key={m}
                   type="button"
-                  onClick={() => setSplitMethod(m)}
+                  onClick={() => handleSplitMethodChange(m)}
                   className={`py-1.5 rounded text-[11px] font-medium capitalize transition-colors ${
                     splitMethod === m
                       ? 'bg-bgMain text-primaryAccent font-bold border border-borderSubtle'
