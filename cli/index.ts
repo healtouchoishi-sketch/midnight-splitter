@@ -1,5 +1,5 @@
-import { midnightContractClient } from '../src/api/contractClient.js';
-import { calculateSplits, computeOptimalSettlements } from '../src/utils/splitCalculator.js';
+import { midnightContractClient } from '../src/api/contractClient';
+import { calculateSplits, computeOptimalSettlements } from '../src/utils/splitCalculator';
 
 async function runCli() {
   console.log(`=======================================================`);
