@@ -5,6 +5,13 @@
 
 ---
 
+## 🎥 Video Demonstration & Walkthrough
+
+Watch the complete dApp demonstration video on YouTube:  
+▶️ **[Midnight Private Group Expense Splitter Demo Video](https://youtu.be/I_FreFu17sM)**
+
+---
+
 ## 🚀 Product Overview & Value Proposition
 
 **Private Group Expense Splitter** enables friends, roommates, travel groups, families, and organizations to split group expenses while keeping personal financial histories strictly confidential.
@@ -86,6 +93,7 @@ private-group-expense-splitter/
 │   │   └── PrivacyDemoCard.tsx    # ZK Public vs Private State Inspector
 │   ├── pages/
 │   │   ├── LandingPage.tsx        # Marketing & Value Proposition Landing
+│   │   ├── SignUpPage.tsx         # User Profile & Registration Flow
 │   │   ├── DashboardPage.tsx      # Main Financial Overview & SaaS Metric Cards
 │   │   ├── GroupsPage.tsx         # Group Roster & Management List
 │   │   ├── GroupDetailsPage.tsx   # Detailed Group Dashboard & Balance Inspector
@@ -168,41 +176,3 @@ VITE_CONTRACT_ADDRESS=<your_preprod_contract_address>
 VITE_PROOF_SERVER_URL=http://localhost:6300
 ```
 Then run `npm run dev` or build for production (`npm run build`).
-
----
-
-## ✅ Submission Checklists
-
-### Level 1 Requirements Checklist
-- [x] Compact Smart Contract (`contract/src/group_expense.compact`)
-- [x] Public Ledger vs Private Witness Separation (`disclose(...)` enforced)
-- [x] Clean compilation with Compact compiler `0.5.1`
-- [x] Managed Artifacts generated (`contract/managed/`)
-- [x] Local Deployment & Setup script (`scripts/setup.ts`)
-- [x] Interactive CLI tool (`cli/index.ts`)
-- [x] README with Overview, Product Idea & Setup Guide
-- [x] Public State vs Private Witness explanation
-- [x] Preprod deploy status & blocker documented per mentor guidance
-
-### Level 2 Requirements Checklist
-- [x] React + TypeScript + Vite SaaS Frontend
-- [x] Clean White Minimalist Theme (Stripe/Linear/Notion solid styling)
-- [x] Lace Wallet Connect/Disconnect UI & Wallet status visible
-- [x] Network & contract address configurable via `.env`
-- [x] UI calls Compact circuits (`createGroup`, `addPrivateExpense`, `settleBalances`)
-- [x] UI handles loading, success, and error states
-- [x] Public State Panel & Privacy Demonstration Inspector
-- [x] README documents privacy claim & how to run locally
-- [x] README documents how to switch to Preprod once address is available
-
-### Level 3 Requirements Checklist
-- [x] Category Mapping: Private Payroll / Splits
-- [x] Automated Test Suite (10 tests passing across 3 test files)
-- [x] GitHub Actions CI Pipeline (`.github/workflows/ci.yml`)
-- [x] CI workflow runs contract compilation (`npm run compile`)
-- [x] CI workflow runs test suite (`npm test`)
-- [x] CI workflow typechecks & builds frontend (`npm run build`)
-- [x] README has Privacy Model section (observer analysis)
-- [x] README has Product Proposal section
-- [x] README has Level 1, 2, 3 submission checklists
-- [x] Polished demo-ready UI
