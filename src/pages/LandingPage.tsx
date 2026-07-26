@@ -1,12 +1,12 @@
 import React from 'react';
-import { Shield, Lock, Users, ArrowRight, CheckCircle2, Zap, Scale, EyeOff, Award } from 'lucide-react';
+import { Shield, Lock, Users, ArrowRight, CheckCircle2, Zap, Scale, EyeOff, UserPlus, Wallet } from 'lucide-react';
 
 interface LandingPageProps {
-  onOpenApp: () => void;
+  onGoToSignUp: () => void;
   onConnectWallet: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onOpenApp, onConnectWallet }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onGoToSignUp, onConnectWallet }) => {
   return (
     <div className="space-y-16 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       
@@ -26,11 +26,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenApp, onConnectWa
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-          <button onClick={onOpenApp} className="btn-primary text-base px-6 py-3 w-full sm:w-auto">
-            <span>Launch Dashboard</span>
-            <ArrowRight className="w-4 h-4" />
+          <button onClick={onGoToSignUp} className="btn-primary text-base px-6 py-3 w-full sm:w-auto">
+            <UserPlus className="w-5 h-5" />
+            <span>Create Account & Sign Up</span>
+            <ArrowRight className="w-4 h-4 ml-1" />
           </button>
           <button onClick={onConnectWallet} className="btn-secondary text-base px-6 py-3 w-full sm:w-auto">
+            <Wallet className="w-5 h-5 text-textSecondary" />
             <span>Connect Lace Wallet</span>
           </button>
         </div>
@@ -98,7 +100,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenApp, onConnectWa
         <h2 className="text-xl font-bold text-textPrimary">How Private Group Splitting Works</h2>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {[
-            { step: '01', title: 'Create Group', desc: 'Initialize group Compact contract with encrypted member roster' },
+            { step: '01', title: 'Create Account & Group', desc: 'Sign up and initialize group Compact contract with encrypted roster' },
             { step: '02', title: 'Add Private Expense', desc: 'Submit receipt metadata & split weights into local ZK witness' },
             { step: '03', title: 'Generate ZK Proof', desc: 'Publish 32-byte state commitment to Midnight ledger' },
             { step: '04', title: 'Settle Balances', desc: 'Execute zero-sum settlement transfers with Lace wallet' },
@@ -110,6 +112,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onOpenApp, onConnectWa
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Final CTA Card */}
+      <section className="card-container text-center py-10 space-y-4 max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold text-textPrimary">Ready for Privacy-First Group Payroll & Splits?</h2>
+        <p className="text-xs text-textSecondary">
+          Sign up in under 30 seconds. Experience zero-knowledge financial confidentiality on Midnight.
+        </p>
+        <button onClick={onGoToSignUp} className="btn-primary px-6 py-2.5 text-sm mx-auto">
+          <UserPlus className="w-4 h-4" />
+          <span>Get Started Now</span>
+        </button>
       </section>
 
     </div>

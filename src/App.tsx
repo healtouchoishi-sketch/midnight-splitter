@@ -9,6 +9,7 @@ import { Sidebar } from './components/Sidebar';
 import { WalletModal } from './components/WalletModal';
 
 import { LandingPage } from './pages/LandingPage';
+import { SignUpPage } from './pages/SignUpPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { GroupsPage } from './pages/GroupsPage';
 import { GroupDetailsPage } from './pages/GroupDetailsPage';
@@ -33,7 +34,7 @@ const INITIAL_GROUPS: Group[] = [
     zkBalanceCommitment: '0x4f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
     contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
     members: [
-      { id: 'mbr_alice', name: 'Alice', walletAddress: 'mn_addr_undeployed1abc...', balance: 143.33 },
+      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_undeployed1abc...', balance: 143.33 },
       { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_undeployed2def...', balance: -71.67 },
       { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_undeployed3ghi...', balance: -71.66 }
     ],
@@ -45,14 +46,14 @@ const INITIAL_GROUPS: Group[] = [
         totalAmount: 250.00,
         currency: 'USD',
         payerId: 'mbr_alice',
-        payerName: 'Alice',
+        payerName: 'Alice Vance',
         category: 'Groceries',
         date: '2026-07-20',
         splitMethod: 'equal',
         isPrivateWitness: true,
         zkCommitment: '0x4f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
         splits: [
-          { memberId: 'mbr_alice', memberName: 'Alice', amount: 83.34 },
+          { memberId: 'mbr_alice', memberName: 'Alice Vance', amount: 83.34 },
           { memberId: 'mbr_bob', memberName: 'Bob', amount: 83.33 },
           { memberId: 'mbr_charlie', memberName: 'Charlie', amount: 83.33 }
         ]
@@ -64,14 +65,14 @@ const INITIAL_GROUPS: Group[] = [
         totalAmount: 180.00,
         currency: 'USD',
         payerId: 'mbr_alice',
-        payerName: 'Alice',
+        payerName: 'Alice Vance',
         category: 'Rent',
         date: '2026-07-22',
         splitMethod: 'equal',
         isPrivateWitness: true,
         zkCommitment: '0x9f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
         splits: [
-          { memberId: 'mbr_alice', memberName: 'Alice', amount: 60.00 },
+          { memberId: 'mbr_alice', memberName: 'Alice Vance', amount: 60.00 },
           { memberId: 'mbr_bob', memberName: 'Bob', amount: 60.00 },
           { memberId: 'mbr_charlie', memberName: 'Charlie', amount: 60.00 }
         ]
@@ -89,7 +90,7 @@ const INITIAL_GROUPS: Group[] = [
     zkBalanceCommitment: '0x88884f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
     contractAddress: '0x9876543210fedcba9876543210fedcba98765432',
     members: [
-      { id: 'mbr_alice', name: 'Alice', walletAddress: 'mn_addr_undeployed1abc...', balance: 200.00 },
+      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_undeployed1abc...', balance: 200.00 },
       { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_undeployed2def...', balance: -100.00 },
       { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_undeployed3ghi...', balance: -100.00 }
     ],
@@ -101,14 +102,14 @@ const INITIAL_GROUPS: Group[] = [
         totalAmount: 600.00,
         currency: 'USD',
         payerId: 'mbr_alice',
-        payerName: 'Alice',
+        payerName: 'Alice Vance',
         category: 'Travel',
         date: '2026-07-18',
         splitMethod: 'equal',
         isPrivateWitness: true,
         zkCommitment: '0x777712bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
         splits: [
-          { memberId: 'mbr_alice', memberName: 'Alice', amount: 200.00 },
+          { memberId: 'mbr_alice', memberName: 'Alice Vance', amount: 200.00 },
           { memberId: 'mbr_bob', memberName: 'Bob', amount: 200.00 },
           { memberId: 'mbr_charlie', memberName: 'Charlie', amount: 200.00 }
         ]
@@ -118,8 +119,11 @@ const INITIAL_GROUPS: Group[] = [
 ];
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  // Application starts on Landing page by default
+  const [activeTab, setActiveTab] = useState<string>('landing');
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+
+  const [userProfile, setUserProfile] = useState<{ name: string; email: string; currency: string } | null>(null);
 
   const [groups, setGroups] = useState<Group[]>(INITIAL_GROUPS);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
@@ -162,6 +166,11 @@ export const App: React.FC = () => {
       walletName: null
     });
     setIsWalletModalOpen(false);
+  };
+
+  const handleCompleteSignUp = (data: { name: string; email: string; currency: string }) => {
+    setUserProfile(data);
+    setActiveTab('dashboard');
   };
 
   const handleCreateGroup = (groupData: { name: string; description: string; currency: string; memberNames: string[] }) => {
@@ -299,8 +308,17 @@ export const App: React.FC = () => {
         <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
           {activeTab === 'landing' && (
             <LandingPage
-              onOpenApp={() => setActiveTab('dashboard')}
+              onGoToSignUp={() => setActiveTab('signup')}
               onConnectWallet={() => setIsWalletModalOpen(true)}
+            />
+          )}
+
+          {activeTab === 'signup' && (
+            <SignUpPage
+              wallet={wallet}
+              onConnectWallet={() => setIsWalletModalOpen(true)}
+              onCompleteSignUp={handleCompleteSignUp}
+              onGoToLanding={() => setActiveTab('landing')}
             />
           )}
 

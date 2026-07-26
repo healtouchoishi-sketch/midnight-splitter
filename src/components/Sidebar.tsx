@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Users, CreditCard, Scale, Activity, Settings, HelpCircle, ShieldCheck } from 'lucide-react';
+import { Home, UserPlus, LayoutDashboard, Users, CreditCard, Scale, Activity, Settings, ShieldCheck } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
@@ -8,6 +8,8 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const menuItems = [
+    { id: 'landing', label: 'Landing Page', icon: Home },
+    { id: 'signup', label: 'Sign Up Profile', icon: UserPlus },
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'groups', label: 'My Groups', icon: Users },
     { id: 'expenses', label: 'All Expenses', icon: CreditCard },

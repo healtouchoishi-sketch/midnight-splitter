@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Wallet, CircleCheck, AlertCircle, ExternalLink } from 'lucide-react';
+import { Shield, Wallet, CircleCheck, AlertCircle, ExternalLink, UserPlus } from 'lucide-react';
 import { WalletState } from '../types';
 
 interface NavbarProps {
@@ -41,6 +41,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-1 ml-4">
             {[
+              { id: 'landing', label: 'Landing' },
+              { id: 'signup', label: 'Sign Up' },
               { id: 'dashboard', label: 'Dashboard' },
               { id: 'groups', label: 'Groups' },
               { id: 'expenses', label: 'Expenses' },
