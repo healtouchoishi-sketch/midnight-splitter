@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "compile": "mkdir -p contract/managed && /home/userarya/.local/bin/compact compile contract/src/group_expense.compact contract/managed/group_expense",
+    "compile": "compact compile contract/src/group_expense.compact contract/managed/group_expense",
     "setup": "tsx scripts/setup.ts",
     "cli": "tsx cli/index.ts",
     "test": "vitest run"
