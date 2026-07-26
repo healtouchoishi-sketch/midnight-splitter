@@ -119,7 +119,7 @@ const INITIAL_GROUPS: Group[] = [
 ];
 
 export const App: React.FC = () => {
-  // Application starts on Landing page by default
+  // Application ALWAYS starts on Landing page
   const [activeTab, setActiveTab] = useState<string>('landing');
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
@@ -131,11 +131,11 @@ export const App: React.FC = () => {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
 
   const [wallet, setWallet] = useState<WalletState>({
-    isConnected: true,
-    address: 'mn_addr_undeployed1abc9876543210xyz',
+    isConnected: false,
+    address: null,
     network: 'undeployed',
-    balance: '1000.00 tADA',
-    walletName: 'Lace Midnight'
+    balance: '0 tADA',
+    walletName: null
   });
 
   // Flatten all expenses across groups
@@ -170,6 +170,16 @@ export const App: React.FC = () => {
 
   const handleCompleteSignUp = (data: { name: string; email: string; currency: string }) => {
     setUserProfile(data);
+    if (!wallet.isConnected) {
+      handleConnectWallet();
+    }
+    setActiveTab('dashboard');
+  };
+
+  const handleEnterDemo = () => {
+    if (!wallet.isConnected) {
+      handleConnectWallet();
+    }
     setActiveTab('dashboard');
   };
 
@@ -278,6 +288,29 @@ export const App: React.FC = () => {
 
   const currentSelectedGroup = groups.find(g => g.id === selectedGroupId) || groups[0];
 
+  // Render standalone view for Landing & Sign Up pages
+  if (activeTab === 'landing') {
+    return (
+      <LandingPage
+        onGoToSignUp={() => setActiveTab('signup')}
+        onConnectWallet={() => setIsWalletModalOpen(true)}
+        onEnterDemo={handleEnterDemo}
+      />
+    );
+  }
+
+  if (activeTab === 'signup') {
+    return (
+      <SignUpPage
+        wallet={wallet}
+        onConnectWallet={() => setIsWalletModalOpen(true)}
+        onCompleteSignUp={handleCompleteSignUp}
+        onGoToLanding={() => setActiveTab('landing')}
+      />
+    );
+  }
+
+  // Dashboard Workspace View
   return (
     <div className="min-h-screen bg-bgMain text-textPrimary flex flex-col font-sans">
       
@@ -292,7 +325,7 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Main Layout Body */}
+      {/* Main SaaS Dashboard Layout */}
       <div className="flex-1 flex max-w-7xl w-full mx-auto">
         
         {/* Left Sidebar */}
@@ -306,22 +339,6 @@ export const App: React.FC = () => {
 
         {/* Page Content View */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
-          {activeTab === 'landing' && (
-            <LandingPage
-              onGoToSignUp={() => setActiveTab('signup')}
-              onConnectWallet={() => setIsWalletModalOpen(true)}
-            />
-          )}
-
-          {activeTab === 'signup' && (
-            <SignUpPage
-              wallet={wallet}
-              onConnectWallet={() => setIsWalletModalOpen(true)}
-              onCompleteSignUp={handleCompleteSignUp}
-              onGoToLanding={() => setActiveTab('landing')}
-            />
-          )}
-
           {activeTab === 'dashboard' && (
             <DashboardPage
               groups={groups}
