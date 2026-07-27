@@ -34,9 +34,9 @@ const INITIAL_GROUPS: Group[] = [
     zkBalanceCommitment: '0x4f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
     contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
     members: [
-      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_undeployed1abc...', balance: 143.33 },
-      { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_undeployed2def...', balance: -71.67 },
-      { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_undeployed3ghi...', balance: -71.66 }
+      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_preprod1q9x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5', balance: 143.33 },
+      { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_preprod1q88e9yv6wvxll5p3j4c5k6m7n8p9q0r1s2t3u4v5w6x', balance: -71.67 },
+      { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_preprod1q77a4x5y6z7w8v9u0t1s2r3q4p5o6n7m8l9k0j1h2g', balance: -71.66 }
     ],
     expenses: [
       {
@@ -90,9 +90,9 @@ const INITIAL_GROUPS: Group[] = [
     zkBalanceCommitment: '0x88884f8a12bc93e0451a892b11ef44567890abcdef1234567890abcdef1234567890',
     contractAddress: '0x9876543210fedcba9876543210fedcba98765432',
     members: [
-      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_undeployed1abc...', balance: 200.00 },
-      { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_undeployed2def...', balance: -100.00 },
-      { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_undeployed3ghi...', balance: -100.00 }
+      { id: 'mbr_alice', name: 'Alice Vance', walletAddress: 'mn_addr_preprod1q9x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5', balance: 200.00 },
+      { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_preprod1q88e9yv6wvxll5p3j4c5k6m7n8p9q0r1s2t3u4v5w6x', balance: -100.00 },
+      { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_preprod1q77a4x5y6z7w8v9u0t1s2r3q4p5o6n7m8l9k0j1h2g', balance: -100.00 }
     ],
     expenses: [
       {
@@ -149,8 +149,8 @@ export const App: React.FC = () => {
   const handleConnectWallet = () => {
     setWallet({
       isConnected: true,
-      address: 'mn_addr_undeployed1abc9876543210xyz',
-      network: 'undeployed',
+      address: 'mn_addr_preprod1q9x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5',
+      network: 'preprod',
       balance: '1000.00 tADA',
       walletName: 'Lace Midnight'
     });
@@ -188,7 +188,7 @@ export const App: React.FC = () => {
     const newMembers = groupData.memberNames.map((name, idx) => ({
       id: `mbr_${Date.now()}_${idx}`,
       name,
-      walletAddress: `mn_addr_undeployed${idx + 1}...`,
+      walletAddress: `mn_addr_preprod1q0${idx + 1}x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5`,
       balance: 0
     }));
 
@@ -218,7 +218,7 @@ export const App: React.FC = () => {
     const newMemberObj = {
       id: `mbr_${Date.now()}`,
       name: memberName,
-      walletAddress: `mn_addr_undeployed${targetGroup.members.length + 1}...`,
+      walletAddress: `mn_addr_preprod1q0${targetGroup.members.length + 1}x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5`,
       balance: 0
     };
 

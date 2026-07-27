@@ -1,7 +1,10 @@
 # Private Group Expense Splitter (Midnight Network dApp)
 
+[![CI Build](https://github.com/healtouchoishi-sketch/midnight-splitter/actions/workflows/ci.yml/badge.svg)](https://github.com/healtouchoishi-sketch/midnight-splitter/actions)
+
 > A privacy-first, zero-knowledge financial expense sharing SaaS platform built on the **Midnight Blockchain**.  
 > Satisfies **Level 1, Level 2, and Level 3** submission requirements.
+> See detailed technical proposal in [PROPOSAL.md](file:///w:/Midnight2/PROPOSAL.md).
 
 ---
 
@@ -160,7 +163,7 @@ npm run setup -- --network preprod
 ```
 
 ### Network Diagnostics Log
-- **Wallet Address**: `mn_addr_preprod1abc9876543210xyz...`
+- **Wallet Address**: `mn_addr_preprod1q9x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5`
 - **Network ID**: `preprod`
 - **RPC URL**: `https://rpc.preprod.midnight.network`
 - **Indexer GraphQL**: `https://indexer.preprod.midnight.network/api/v4/graphql`

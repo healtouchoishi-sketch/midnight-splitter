@@ -38,9 +38,9 @@ async function runCli() {
 
   console.log(`3. Computing Zero-Knowledge Debt Settlement...`);
   const mockMembers = [
-    { id: 'mbr_alice', name: 'Alice', walletAddress: 'mn_addr_undeployed1...', balance: 100 },
-    { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_undeployed2...', balance: -50 },
-    { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_undeployed3...', balance: -50 }
+    { id: 'mbr_alice', name: 'Alice', walletAddress: 'mn_addr_preprod1q9x0z7e9g60f4j8l3c2v5n7m1k8p3q2w5e7r9t1y3u5', balance: 100 },
+    { id: 'mbr_bob', name: 'Bob', walletAddress: 'mn_addr_preprod1q88e9yv6wvxll5p3j4c5k6m7n8p9q0r1s2t3u4v5w6x', balance: -50 },
+    { id: 'mbr_charlie', name: 'Charlie', walletAddress: 'mn_addr_preprod1q77a4x5y6z7w8v9u0t1s2r3q4p5o6n7m8l9k0j1h2g', balance: -50 }
   ];
 
   const optimalTransfers = computeOptimalSettlements(groupId, 'USD', mockMembers);
